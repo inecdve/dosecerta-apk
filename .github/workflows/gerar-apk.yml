@@ -1,7 +1,5 @@
 name: Gerar APK DoseCerta
 
-on:name: Gerar APK DoseCerta
-
 on:
   push:
   workflow_dispatch:
