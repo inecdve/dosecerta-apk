@@ -53,7 +53,7 @@ jobs:
           EOF
           cat << 'EOF' > app/src/main/AndroidManifest.xml
           <?xml version="1.0" encoding="utf-8"?>
-          <manifest xmlns:android="http://schemas.android.com/apk/android" package="com.dosecerta.app">
+          <manifest xmlns:android="http://schemas.android.com/apk/android">
               <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
               <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
               <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
