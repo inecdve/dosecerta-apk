@@ -19,9 +19,12 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.5'
-      - name: Criar arquivos do projeto Android e compilar APK
+      - name: Criar arquivos do projeto Android com Keystore Fixa e compilar APK
         run: |
           mkdir -p app/src/main/java/com/dosecerta/app app/src/main/assets app/src/main/res/drawable
+          cat << 'EOF' | base64 -d > app/dosecerta.jks
+          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
+          EOF
           cat << 'EOF' > settings.gradle
           rootProject.name = "DoseCerta"
           include ':app'
@@ -39,11 +42,28 @@ jobs:
               namespace 'com.dosecerta.app'
               compileSdk 34
               defaultConfig {
-                  applicationId "com.dosecerta.app"
+                  applicationId "com.dosecerta.oficial"
                   minSdk 24
                   targetSdk 34
-                  versionCode 2
-                  versionName "2.0"
+                  versionCode 21
+                  versionName "2.1"
+              }
+              signingConfigs {
+                  fixedKey {
+                      storeFile file('dosecerta.jks')
+                      storePassword 'dosecerta123'
+                      keyAlias 'dosecerta'
+                      keyPassword 'dosecerta123'
+                  }
+              }
+              buildTypes {
+                  debug {
+                      signingConfig signingConfigs.fixedKey
+                  }
+                  release {
+                      signingConfig signingConfigs.fixedKey
+                      minifyEnabled false
+                  }
               }
               compileOptions {
                   sourceCompatibility JavaVersion.VERSION_17
@@ -189,7 +209,7 @@ jobs:
           .btn-outline{background:#e2e8f0;color:#334155}
           .btn-edit{background:#dbeafe;color:#1d4ed8}
           .btn-danger{background:#fee2e2;color:#be123c}
-          input,select{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:10px;margin:4px 0 10px;font-size:14px;background:#fff}
+          input,select,textarea{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:10px;margin:4px 0 10px;font-size:14px;background:#fff}
           label{font-size:12px;font-weight:600;color:#334155}
           nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e2e8f0;display:grid;grid-template-columns:repeat(4,1fr);padding:8px 0;z-index:20}
           nav button{background:none;border:none;font-size:11px;font-weight:600;color:#64748b;padding:6px}
@@ -244,6 +264,15 @@ jobs:
               </div>
             </div>
             <div id="medList"></div>
+            <div class="card">
+              <h3 style="margin:0 0 6px;font-size:14px">Backup / Transferir Dados</h3>
+              <p style="font-size:11px;color:#64748b;margin:0 0 8px">Copie o código abaixo para guardar seus dados ou cole um backup anterior:</p>
+              <textarea id="backupBox" rows="2" placeholder="Código de backup JSON"></textarea>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-outline" style="flex:1" onclick="exportData()">Gerar / Copiar Backup</button>
+                <button class="btn btn-primary" style="flex:1" onclick="importData()">Importar Backup</button>
+              </div>
+            </div>
           </div>
           <div id="view-saude" style="display:none">
             <div class="card"><h3 style="margin:0 0 10px;font-size:15px">Registrar Medição / Sintoma</h3>
@@ -318,6 +347,8 @@ jobs:
             cancelEdit();save();
           }
           function delMed(id){state.meds=state.meds.filter(x=>x.id!==id);if(document.getElementById('editId').value===String(id))cancelEdit();save();}
+          function exportData(){const b=document.getElementById('backupBox');b.value=JSON.stringify(state);b.select();try{document.execCommand('copy');}catch(e){}}
+          function importData(){try{const p=JSON.parse(document.getElementById('backupBox').value);if(p&&p.meds){state=p;if(!state.skipped)state.skipped={};save();}}catch(e){}}
           function addHealth(){const v=document.getElementById('hVal').value.trim();if(!v)return;state.health.unshift({t:document.getElementById('hType').value,v:v,d:new Date().toLocaleString('pt-BR')});document.getElementById('hVal').value='';save();}
           function changeMonth(delta){calMonth+=delta;if(calMonth<0){calMonth=11;calYear--;}if(calMonth>11){calMonth=0;calYear++;}renderCalendar();}
           function selectCalDate(dStr){selDate=dStr;renderCalendar();}
@@ -373,7 +404,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           cp app/build/outputs/apk/debug/app-debug.apk DoseCerta.apk
-          gh release create v2.0.${{ github.run_number }} DoseCerta.apk --title "DoseCerta APK v2.0.${{ github.run_number }}" --notes "APK atualizado com Calendario Mensal de Adesao (dias tomados e esquecidos), Edicao de Medicamentos e Icone personalizado." || true
+          gh release create v2.1.${{ github.run_number }} DoseCerta.apk --title "DoseCerta APK v2.1.${{ github.run_number }} (Assinatura Fixa Permanente)" --notes "APK com Keystore fixa permanente (permite atualizar no futuro sem conflito e sem perder dados), Calendario Mensal, Edicao de Medicamentos, Backup e Icone personalizado." || true
       - uses: actions/upload-artifact@v4
         with:
           name: DoseCerta-APK
