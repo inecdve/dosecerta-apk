@@ -1,1 +1,48 @@
+name: Gerar APK DoseCerta
 
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
+      - name: Salvar Keystore Permanente e Compilar APK v2.3
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ ! -f dosecerta.jks ]; then
+            keytool -genkeypair -v -keystore dosecerta.jks -storepass dosecerta123 -alias dosecerta -keypass dosecerta123 -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=DoseCerta, OU=App, O=DoseCerta, L=Brasil, ST=BR, C=BR"
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add dosecerta.jks
+            git commit -m "Salvar chave permanente dosecerta.jks"
+            git push origin HEAD:main
+          fi
+          python3 -c '
+          import subprocess, yaml
+          raw = subprocess.check_output(["git", "show", "0474fd7:.github/workflows/gerar-apk.yml"]).decode()
+          wf = yaml.safe_load(raw)
+          for step in wf["jobs"]["build"]["steps"]:
+              if "run" in step and "gradle assembleDebug" in step["run"]:
+                  s = step["run"].replace("com.dosecerta.oficial", "com.dosecerta.app.final")
+                  s = s.replace("gradle assembleDebug", "cp dosecerta.jks app/dosecerta.jks\ngradle assembleDebug")
+                  open("build_android.sh", "w").write(s)
+          '
+          bash build_android.sh
+          cp app/build/outputs/apk/debug/app-debug.apk DoseCerta.apk
+          gh release create v2.3.${{ github.run_number }} DoseCerta.apk --title "DoseCerta APK v2.3.${{ github.run_number }}" --notes "APK sem conflito e com chave permanente dosecerta.jks salva no repositorio." || true
