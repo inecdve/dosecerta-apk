@@ -1,0 +1,6 @@
+def r = projectDir.parentFile
+new File(r, "app/src/main/java/com/dosecerta/app/AlarmReceiver.java").text = new File(r, "AlarmReceiver.java").text
+def mf = new File(r, "app/src/main/java/com/dosecerta/app/MainActivity.java")
+mf.text = mf.text.replace('in.putExtra("med_name", name);', 'in.putExtra("med_name", name); in.putExtra("med_id", m.optString("id","")); in.putExtra("time_str", t);').replace('Bridge(Context c) { ctx = c; }', 'Bridge(Context c) { ctx = c; } @JavascriptInterface public String getConf() { SharedPreferences p = ctx.getSharedPreferences(PREFS_NAME, 0); String s = p.getString("cf", ""); p.edit().putString("cf", "").apply(); return s; }')
+def hf = new File(r, "app/src/main/assets/index.html")
+hf.text = hf.text.replace("setInterval(()=>{", "setInterval(()=>{if(window.AndroidBridge&&window.AndroidBridge.getConf){const c=window.AndroidBridge.getConf();if(c)c.split(';').filter(Boolean).forEach(x=>{const p=x.split('|');takeDose(Number(p[0]),p[1]);});}")
